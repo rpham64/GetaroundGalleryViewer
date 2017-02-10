@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
+import com.orhanobut.logger.Logger;
 import com.rpham64.android.getaroundgalleryviewer.network.RestClient;
 
 import java.io.IOException;
@@ -38,6 +39,8 @@ public class ApplicationController extends Application {
         sInstance = this;
         Stetho.initializeWithDefaults(this);
 
+        Logger.d("ApplicationController created");
+
         mOkHttpClient = new OkHttpClient.Builder()
                 .addNetworkInterceptor(new StethoInterceptor())
                 .addInterceptor(new Interceptor() {
@@ -69,5 +72,9 @@ public class ApplicationController extends Application {
         }
 
         return mRestClient;
+    }
+
+    public static ApplicationController getInstance() {
+        return sInstance;
     }
 }
