@@ -13,6 +13,9 @@ import rx.Observable;
 public interface RestClient {
 
     @GET("v1/photos?feature=popular")
+    PopularPhotosResponse getPopularPhotos(@Query("page") int page);
+
+    @GET("v1/photos?feature=popular")
     Observable<PopularPhotosResponse> getPopularPhotosRx(@Query("page") int page);
 
 }

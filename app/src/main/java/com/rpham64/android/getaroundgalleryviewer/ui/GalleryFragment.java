@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
-import com.orhanobut.logger.Logger;
 import com.rpham64.android.getaroundgalleryviewer.R;
 import com.rpham64.android.getaroundgalleryviewer.models.Photo;
 import com.rpham64.android.getaroundgalleryviewer.utils.GalleryAdapter;
@@ -21,8 +20,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import rx.Observable;
-import rx.subjects.PublishSubject;
 
 /**
  * Created by Rudolf on 2/7/2017.
@@ -38,9 +35,6 @@ public class GalleryFragment extends Fragment implements GalleryPresenter.View{
     private GalleryAdapter mAdapter;
     private GalleryPresenter mPresenter;
 
-    private PublishSubject<Integer> mPagedSubject;
-    private Observable<Integer> mObservable;
-
     private int currentPage;
     private int pages;
 
@@ -51,15 +45,11 @@ public class GalleryFragment extends Fragment implements GalleryPresenter.View{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Logger.d("GalleryFragment created");
 
         mPresenter = new GalleryPresenter();
-
-        mPagedSubject = PublishSubject.create();
-        mObservable = mPagedSubject;
         currentPage = 1;
 
-        ((PublishSubject<Integer>) mObservable).onNext(currentPage);
+        mPresenter.fetch(currentPage);
     }
 
     @Nullable
@@ -78,7 +68,7 @@ public class GalleryFragment extends Fragment implements GalleryPresenter.View{
                 if (currentPage < pages) {
 
                     // Load next page of photos
-                    ((PublishSubject<Integer>) mObservable).onNext(++currentPage);
+                    mPresenter.fetch(currentPage + 1);
 
                 } else {
                     Toast.makeText(getContext(), "No more pictures to show.", Toast.LENGTH_SHORT).show();
@@ -89,6 +79,12 @@ public class GalleryFragment extends Fragment implements GalleryPresenter.View{
         });
 
         return view;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mPresenter.onPause();
     }
 
     @Override
@@ -114,9 +110,6 @@ public class GalleryFragment extends Fragment implements GalleryPresenter.View{
     public void showPhotos(List<Photo> photos, PagedResult pagedResult) {
 
         if (isAdded() && mAdapter == null) {
-
-            Logger.d("Adapter is null. Adding adapter to recyclerview");
-
             mAdapter = new GalleryAdapter(getContext(), photos);
             recyclerView.setAdapter(mAdapter);
         }
@@ -131,10 +124,5 @@ public class GalleryFragment extends Fragment implements GalleryPresenter.View{
         } else {
             mAdapter.addPhotos(photos);
         }
-    }
-
-    @Override
-    public Observable<Integer> getPagedObservable() {
-        return mObservable;
     }
 }

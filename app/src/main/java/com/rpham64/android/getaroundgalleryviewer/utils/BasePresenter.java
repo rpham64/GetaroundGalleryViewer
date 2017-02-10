@@ -13,10 +13,10 @@ import rx.subscriptions.CompositeSubscription;
 public class BasePresenter<T> implements IPresenter<T> {
 
     private T mView;
-    private CompositeSubscription mSubs;
+    private CompositeSubscription mSubs = new CompositeSubscription();
 
     public BasePresenter() {
-        mSubs = new CompositeSubscription();
+
     }
 
     @Override
