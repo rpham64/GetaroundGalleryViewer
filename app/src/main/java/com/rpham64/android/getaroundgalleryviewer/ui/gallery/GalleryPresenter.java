@@ -1,4 +1,4 @@
-package com.rpham64.android.getaroundgalleryviewer.ui;
+package com.rpham64.android.getaroundgalleryviewer.ui.gallery;
 
 import com.orhanobut.logger.Logger;
 import com.rpham64.android.getaroundgalleryviewer.models.Photo;

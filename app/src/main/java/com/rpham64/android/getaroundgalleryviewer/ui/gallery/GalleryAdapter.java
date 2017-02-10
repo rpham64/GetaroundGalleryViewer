@@ -1,18 +1,19 @@
-package com.rpham64.android.getaroundgalleryviewer.utils;
+package com.rpham64.android.getaroundgalleryviewer.ui.gallery;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerviewViewHolder;
 import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
 import com.orhanobut.logger.Logger;
 import com.rpham64.android.getaroundgalleryviewer.R;
 import com.rpham64.android.getaroundgalleryviewer.models.Photo;
+import com.rpham64.android.getaroundgalleryviewer.ui.photo.PhotoActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -25,7 +26,11 @@ import butterknife.OnClick;
  * Created by Rudolf on 2/9/2017.
  */
 
-public class GalleryAdapter extends UltimateViewAdapter<GalleryViewHolder> {
+public class GalleryAdapter extends UltimateViewAdapter<GalleryAdapter.GalleryViewHolder> {
+
+    public interface Extras {
+        String imageUrl = "GalleryAdapter.imageUrl";
+    }
 
     private Context mContext;
     private List<Photo> mPhotos;
@@ -93,29 +98,35 @@ public class GalleryAdapter extends UltimateViewAdapter<GalleryViewHolder> {
         mPhotos.addAll(photos);
         notifyDataSetChanged();
     }
-}
 
-class GalleryViewHolder extends UltimateRecyclerviewViewHolder {
+    class GalleryViewHolder extends UltimateRecyclerviewViewHolder {
 
-    @BindView(R.id.imageview_gallery_item) ImageView imgPhoto;
+        @BindView(R.id.imageview_gallery_item) ImageView imgPhoto;
 
-    private Context mContext;
+        private Context mContext;
+        private Photo mPhoto;
 
-    public GalleryViewHolder(Context context, View itemView) {
-        super(itemView);
-        ButterKnife.bind(this, itemView);
-        mContext = context;
-    }
+        public GalleryViewHolder(Context context, View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+            mContext = context;
+        }
 
-    public void bindPhoto(Photo photo) {
-        Picasso.with(mContext)
-                .load(photo.imageUrl)
-                .placeholder(R.color.grey)
-                .into(imgPhoto);
-    }
+        public void bindPhoto(Photo photo) {
 
-    @OnClick(R.id.imageview_gallery_item)
-    public void onPhotoClicked() {
-        Toast.makeText(mContext, "Photo clicked!", Toast.LENGTH_SHORT).show();
+            mPhoto = photo;
+
+            Picasso.with(mContext)
+                    .load(photo.imageUrl)
+                    .placeholder(R.color.grey)
+                    .into(imgPhoto);
+        }
+
+        @OnClick(R.id.imageview_gallery_item)
+        public void onPhotoClicked() {
+            Intent intent = new Intent(mContext, PhotoActivity.class);
+            intent.putExtra(Extras.imageUrl, mPhoto.imageUrl);
+            mContext.startActivity(intent);
+        }
     }
 }

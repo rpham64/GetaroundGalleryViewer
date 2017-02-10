@@ -2,11 +2,10 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
-    <com.marshalchen.ultimaterecyclerview.UltimateRecyclerView
-        android:id="@+id/recycler_view_gallery_fragment"
+    <uk.co.senab.photoview.PhotoView
+        android:id="@+id/view_photo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         />

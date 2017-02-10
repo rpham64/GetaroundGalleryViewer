@@ -15,7 +15,7 @@ public interface RestClient {
     @GET("v1/photos?feature=popular")
     PopularPhotosResponse getPopularPhotos(@Query("page") int page);
 
-    @GET("v1/photos?feature=popular")
+    @GET("v1/photos?feature=popular&image_size=4")
     Observable<PopularPhotosResponse> getPopularPhotosRx(@Query("page") int page);
 
 }

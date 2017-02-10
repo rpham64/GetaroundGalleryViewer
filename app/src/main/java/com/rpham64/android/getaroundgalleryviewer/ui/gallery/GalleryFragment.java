@@ -1,4 +1,4 @@
-package com.rpham64.android.getaroundgalleryviewer.ui;
+package com.rpham64.android.getaroundgalleryviewer.ui.gallery;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,12 +7,12 @@ import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.rpham64.android.getaroundgalleryviewer.R;
 import com.rpham64.android.getaroundgalleryviewer.models.Photo;
-import com.rpham64.android.getaroundgalleryviewer.utils.GalleryAdapter;
 import com.rpham64.android.getaroundgalleryviewer.utils.PagedResult;
 
 import java.util.List;
@@ -30,6 +30,7 @@ public class GalleryFragment extends Fragment implements GalleryPresenter.View{
     public static final String TAG = GalleryFragment.class.getName();
 
     @BindView(R.id.recycler_view_gallery_fragment) UltimateRecyclerView recyclerView;
+    @BindView(R.id.progress_bar) ProgressBar progressBar;
 
     private Unbinder mUnbinder;
     private GalleryAdapter mAdapter;
@@ -112,6 +113,8 @@ public class GalleryFragment extends Fragment implements GalleryPresenter.View{
         if (isAdded() && mAdapter == null) {
             mAdapter = new GalleryAdapter(getContext(), photos);
             recyclerView.setAdapter(mAdapter);
+
+            progressBar.setVisibility(View.GONE);
         }
 
         currentPage = pagedResult.page;

@@ -1,4 +1,4 @@
-package com.rpham64.android.getaroundgalleryviewer.ui;
+package com.rpham64.android.getaroundgalleryviewer.ui.gallery;
 
 import android.support.v4.app.Fragment;
 
